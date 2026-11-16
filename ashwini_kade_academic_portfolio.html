@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwini Kade | Assistant Professor — Commerce & Cost Accounting</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js for Lightweight 3D Rose Petals -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Google Fonts: Fredoka (Bold Rounded Display) & Plus Jakarta Sans (Clean Modern Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Fredoka"', 'system-ui', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            deeppurple: {
+              700: '#3B1E78',
+              800: '#271254',
+              900: '#1B0B3B',
+            },
+            lavender: {
+              300: '#C4B1F9',
+              400: '#A58CF5',
+              500: '#8565EC',
+            },
+            rosepop: {
+              100: '#FFE4EC',
+              200: '#FFC2D4',
+              400: '#FF7096',
+              500: '#F75580',
+              600: '#D93864',
+            },
+            burgundy: {
+              700: '#8E1B3E',
+              800: '#6B142E',
+              900: '#4A0B1E',
+            },
+            sapphire: {
+              600: '#2B59C3',
+              700: '#1B365D',
+              800: '#131B3A',
+            },
+            warmgold: {
+              300: '#FFE27A',
+              400: '#FFCC33',
+              500: '#F5B700',
+            }
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html, body {
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #FFFFFF;
+      color: #1B0B3B;
+    }
+
+    .font-display-bold {
+      font-family: 'Fredoka', system-ui, sans-serif;
+      letter-spacing: -0.01em;
+      line-height: 1.02;
+    }
+
+    /* Tactile Cards Inspired by Reference Layout */
+    .playful-card {
+      background: #FFFFFF;
+      border: 2px solid rgba(39, 18, 84, 0.08);
+      box-shadow: 0 14px 32px -10px rgba(39, 18, 84, 0.12);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+    }
+    .playful-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 42px -12px rgba(107, 20, 46, 0.2);
+    }
+
+    /* Floating Pill Badges (Like the reference's floating white pills) */
+    .floating-pill {
+      background: #FFFFFF;
+      box-shadow: 0 14px 30px -6px rgba(27, 11, 59, 0.22);
+      transition: transform 0.3s ease;
+    }
+    .floating-pill:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    /* Scroll-Driven Left-to-Right CSS Mask Wipe */
+    .petal-reveal-section {
+      position: relative;
+      --reveal-progress: 0%;
+      --feather-width: 18%;
+    }
+
+    .petal-mask-content {
+      -webkit-mask-image: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 1) calc(var(--reveal-progress) - var(--feather-width)),
+        rgba(0, 0, 0, 0) calc(var(--reveal-progress) + 2%)
+      );
+      mask-image: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 1) calc(var(--reveal-progress) - var(--feather-width)),
+        rgba(0, 0, 0, 0) calc(var(--reveal-progress) + 2%)
+      );
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    .petal-mask-content.is-fully-revealed {
+      -webkit-mask-image: none !important;
+      mask-image: none !important;
+    }
+
+    /* Single Fixed Three.js Overlay Canvas */
+    #global-petal-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 45;
+    }
+
+    /* Signature Pill CTA Button with Circle Arrow */
+    .pill-cta-pink {
+      background: linear-gradient(135deg, #FF7096 0%, #F75580 100%);
+      box-shadow: 0 10px 24px -6px rgba(247, 85, 128, 0.55);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .pill-cta-pink:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 28px -6px rgba(247, 85, 128, 0.7);
+    }
+
+    .pill-cta-dark {
+      background: #271254;
+      box-shadow: 0 10px 22px -6px rgba(39, 18, 84, 0.45);
+      transition: transform 0.25s ease, background-color 0.25s ease;
+    }
+    .pill-cta-dark:hover {
+      transform: translateY(-2px);
+      background: #6B142E;
+    }
+
+    /* Soft Cursor Ring */
+    #custom-cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 9999px;
+      border: 2px solid rgba(255, 112, 150, 0.65);
+      background: radial-gradient(circle, rgba(255, 194, 212, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 50;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+    }
+    #custom-cursor-ring.is-hovering {
+      width: 46px;
+      height: 46px;
+      border-color: #FF7096;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      #custom-cursor-ring { display: none; }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-rosepop-500 selection:text-white">
+
+  <!-- Single Lightweight 3D Rose Petal Canvas & Soft Cursor Ring -->
+  <div id="custom-cursor-ring" class="hidden md:block"></div>
+  <canvas id="global-petal-canvas"></canvas>
+
+  <!-- Top Scroll Progress Bar -->
+  <div class="fixed top-0 left-0 right-0 h-1 z-50 bg-deeppurple-900">
+    <div id="top-scroll-progress" class="h-full w-0 bg-gradient-to-r from-rosepop-400 via-warmgold-400 to-lavender-400 transition-all duration-75"></div>
+  </div>
+
+  <!-- HERO + NAVIGATION WRAPPER (Deep Royal Purple & Burgundy Organic Split like Reference) -->
+  <div class="relative bg-deeppurple-800 text-white overflow-hidden">
+    <!-- Organic Lavender & Burgundy Abstract Blob Shapes in Background -->
+    <svg class="absolute top-0 right-0 w-[55%] h-full pointer-events-none opacity-95" viewBox="0 0 800 800" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M260,0 C310,160 150,250 220,420 C290,590 140,680 180,800 L800,800 L800,0 Z" fill="#9D84F2" opacity="0.88" />
+      <path d="M430,0 C380,190 520,320 420,520 C340,680 480,750 450,800 L800,800 L800,0 Z" fill="#6B142E" opacity="0.35" />
+    </svg>
+
+    <!-- Sparkle Accent SVGs -->
+    <svg class="hidden sm:block absolute top-28 left-[44%] w-7 h-7 text-lavender-300 pointer-events-none animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 1L14.5 9.5L23 12L14.5 14.5L12 23L9.5 14.5L1 12L9.5 9.5L12 1Z" />
+    </svg>
+    <svg class="hidden sm:block absolute bottom-32 left-[10%] w-5 h-5 text-rosepop-400 pointer-events-none" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 1L14.5 9.5L23 12L14.5 14.5L12 23L9.5 14.5L1 12L9.5 9.5L12 1Z" />
+    </svg>
+
+    <!-- Sticky-Style Top Navigation inside Hero -->
+    <header id="navbar" class="relative z-40 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-3">
+      <div class="flex items-center justify-between gap-4">
+        <!-- Brand Logo -->
+        <a href="#hero" class="flex items-center gap-2.5 shrink-0 group">
+          <span class="font-display-bold text-xl sm:text-2xl text-white tracking-tight">ashwinikade<span class="text-rosepop-400">.edu</span></span>
+        </a>
+
+        <!-- Center Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-white/90" aria-label="Primary Navigation">
+          <a href="#hero" class="hover:text-warmgold-300 transition-colors">Home</a>
+          <a href="#subjects" class="hover:text-warmgold-300 transition-colors">Subjects</a>
+          <a href="#hire-me" class="hover:text-warmgold-300 transition-colors">Tuition</a>
+          <a href="#experience" class="hover:text-warmgold-300 transition-colors">Experience</a>
+          <a href="#education" class="hover:text-warmgold-300 transition-colors">Education</a>
+          <a href="#toolkit" class="hover:text-warmgold-300 transition-colors">Software</a>
+          <a href="#contact" class="hover:text-warmgold-300 transition-colors">Contact</a>
+        </nav>
+
+        <!-- Right CTA Pill & Mobile Menu -->
+        <div class="flex items-center gap-3 shrink-0">
+          <button id="replay-petals-btn" type="button" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-colors">
+            <span>Replay Petals</span>
+          </button>
+
+          <a href="#hire-me" class="px-5 py-2.5 rounded-full bg-warmgold-400 hover:bg-warmgold-300 text-deeppurple-900 font-extrabold text-xs sm:text-sm shadow-md transition-transform hover:scale-105">
+            Book Tuition
+          </a>
+
+          <button id="mobile-menu-btn" type="button" aria-label="Toggle Menu" class="lg:hidden p-2 rounded-xl bg-white/15 text-white">
+            <svg id="menu-icon-open" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="menu-icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Dropdown -->
+      <div id="mobile-menu" class="hidden lg:hidden mt-4 p-4 rounded-3xl bg-deeppurple-900/95 border border-white/15 flex flex-col gap-2 text-sm font-bold">
+        <a href="#subjects" class="mobile-nav-link px-4 py-2 rounded-xl hover:bg-white/10">Subjects &amp; Courses</a>
+        <a href="#hire-me" class="mobile-nav-link px-4 py-2 rounded-xl bg-rosepop-500 text-white">Hire Me for Tuition</a>
+        <a href="#experience" class="mobile-nav-link px-4 py-2 rounded-xl hover:bg-white/10">Teaching Experience</a>
+        <a href="#education" class="mobile-nav-link px-4 py-2 rounded-xl hover:bg-white/10">Education</a>
+        <a href="#toolkit" class="mobile-nav-link px-4 py-2 rounded-xl hover:bg-white/10">Software &amp; Skills</a>
+        <a href="#contact" class="mobile-nav-link px-4 py-2 rounded-xl hover:bg-white/10">Contact</a>
+        <button id="replay-petals-mobile" type="button" class="mt-1 px-4 py-2 rounded-xl bg-warmgold-400 text-deeppurple-900 text-xs font-extrabold">
+          Replay Rose Petal Reveal
+        </button>
+      </div>
+    </header>
+
+    <!-- HERO CONTENT -->
+    <section id="hero" class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24 sm:pt-10 sm:pb-32">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <!-- Left Column: Stacked Two-Tone Display Typography (Like "Milky Mix" in Reference) -->
+        <div class="lg:col-span-6 space-y-5">
+          <div class="relative inline-block">
+            <!-- Playful Accent Lines around Title -->
+            <svg class="w-7 h-7 text-warmgold-400 mb-1" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+              <path d="M6 22L2 14M14 18L13 8M22 21L27 14" />
+            </svg>
+            <h1 class="font-display-bold text-6xl sm:text-7xl lg:text-[5.5rem] tracking-tight">
+              <span class="block text-white drop-shadow-sm">Ashwini</span>
+              <span class="block text-rosepop-400 drop-shadow-sm">Kade</span>
+            </h1>
+          </div>
+
+          <p class="font-display-bold text-xl sm:text-2xl text-warmgold-300 leading-snug">
+            Assistant Professor • Commerce &amp; Cost Accounting
+          </p>
+
+          <p class="text-sm sm:text-base text-white/85 max-w-md leading-relaxed font-medium">
+            Simplifying complex accounting principles into clear, exam-ready mastery at Pratibha Degree College, Kukatpally—and through personalized 1-on-1 tuition.
+          </p>
+
+          <!-- Primary Pill CTA + Star Rating / Credential Highlight (Matching Reference) -->
+          <div class="flex flex-wrap items-center gap-5 pt-2">
+            <a href="#subjects" class="pill-cta-pink text-white font-bold px-6 py-3.5 rounded-full inline-flex items-center gap-3 text-sm">
+              <span>Explore Subjects</span>
+              <span class="w-6 h-6 rounded-full bg-white text-rosepop-600 flex items-center justify-center">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+
+            <div class="flex items-center gap-2.5">
+              <svg class="w-7 h-7 text-warmgold-400 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <div>
+                <div class="text-base font-extrabold text-white leading-none">2.6+ Yrs <span class="text-xs font-medium text-white/75">(8.3 CGPA)</span></div>
+                <span class="text-[11px] text-lavender-300 font-semibold">M.Com &amp; B.Ed Certified Educator</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Visual Centerpiece Card + Floating Stat Pills (Matching Reference Composition) -->
+        <div class="lg:col-span-6 relative flex justify-center items-center">
+          <!-- Warm Yellow Organic Splash Behind Centerpiece -->
+          <div class="absolute -left-2 sm:left-6 bottom-4 w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-warmgold-300/90 blur-[1px] pointer-events-none"></div>
+
+          <!-- Main Lecturer Centerpiece Card -->
+          <div class="relative z-10 w-full max-w-sm rounded-[2.25rem] bg-gradient-to-b from-rosepop-100 via-white to-rosepop-100 text-deeppurple-900 p-7 shadow-2xl border-4 border-white">
+            <div class="flex items-center justify-between mb-5">
+              <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-burgundy-800 text-white">
+                Faculty Spotlight
+              </span>
+              <span class="text-xs font-extrabold text-sapphire-700">Hyderabad, TS</span>
+            </div>
+
+            <!-- Academic Emblem / Portrait Placeholder -->
+            <div class="mx-auto w-28 h-28 rounded-3xl bg-gradient-to-br from-burgundy-800 via-deeppurple-700 to-sapphire-700 text-white flex flex-col items-center justify-center shadow-lg border-4 border-white mb-4">
+              <span class="font-display-bold text-4xl leading-none">AK</span>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-rosepop-200 mt-1">Lecturer</span>
+            </div>
+
+            <div class="text-center space-y-1.5">
+              <h2 class="font-display-bold text-2xl text-deeppurple-900">Prof. Ashwini Kade</h2>
+              <p class="text-xs font-bold text-burgundy-700">Pratibha Degree College, Kukatpally</p>
+              <p class="text-xs text-deeppurple-800/80 pt-1 leading-relaxed">
+                Specializing in Cost Accounting, Curriculum Design &amp; Student Mentorship.
+              </p>
+            </div>
+
+            <div class="mt-5 pt-4 border-t border-rosepop-200 flex items-center justify-between text-xs font-bold">
+              <span class="text-deeppurple-800">M.Com (8.2 CGPA)</span>
+              <span class="px-2.5 py-1 rounded-full bg-rosepop-500 text-white">B.Ed (8.3 CGPA)</span>
+            </div>
+          </div>
+
+          <!-- Floating White Pill Badge 1 (Right Side, Matching Reference) -->
+          <div class="floating-pill hidden sm:flex items-center gap-3 px-4 py-3 rounded-2xl absolute -right-2 lg:-right-4 top-1/3 z-20 text-deeppurple-900">
+            <div class="w-10 h-10 rounded-full bg-lavender-300/40 text-deeppurple-700 flex items-center justify-center font-extrabold text-sm">
+              100%
+            </div>
+            <div>
+              <div class="text-xs font-extrabold text-deeppurple-900">Concept Clarity</div>
+              <div class="text-[11px] font-semibold text-deeppurple-700/75">Exam-Focused Methods</div>
+            </div>
+          </div>
+
+          <!-- Floating White Pill Badge 2 (Right Side Below, Matching Reference) -->
+          <div class="floating-pill hidden sm:flex items-center gap-3 px-4 py-3 rounded-2xl absolute -right-2 lg:-right-4 bottom-8 z-20 text-deeppurple-900">
+            <div class="w-10 h-10 rounded-full bg-warmgold-300/60 text-burgundy-800 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <div>
+              <div class="text-xs font-extrabold text-deeppurple-900">4 Languages</div>
+              <div class="text-[11px] font-semibold text-deeppurple-700/75">EN • HI • MR • KN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cream/White Organic Scalloped Wave Divider at Bottom of Hero (Exact Reference Transition) -->
+    <div class="relative w-full overflow-hidden leading-none -mt-1">
+      <svg class="w-full h-14 sm:h-20 block" viewBox="0 0 1440 120" preserveAspectRatio="none">
+        <path d="M0,45 C140,95 280,10 440,55 C600,100 760,20 940,60 C1120,100 1300,30 1440,65 L1440,120 L0,120 Z" fill="#FFFFFF" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT ON CRISP WHITE CANVAS -->
+  <main class="space-y-16 py-10 sm:py-14">
+
+    <!-- 2. SIGNATURE SUBJECTS & ACADEMIC SPECIALIZATIONS (Color-Blocked Cards like "Our Signature Milkshakes") -->
+    <section id="subjects" class="petal-reveal-section px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="petal-mask-content">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+            <div>
+              <h2 class="font-display-bold text-3xl sm:text-5xl text-deeppurple-900">
+                Core Teaching
+                <span class="block text-rosepop-500">Specializations</span>
+              </h2>
+              <p class="text-sm sm:text-base text-deeppurple-800/75 mt-2 max-w-lg font-medium">
+                Structured undergraduate courses and personalized academic coaching tailored for clarity and top results.
+              </p>
+            </div>
+
+            <a href="#hire-me" class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-burgundy-800 hover:text-rosepop-500 transition-colors">
+              <span>View Tuition Options</span>
+              <span class="w-8 h-8 rounded-full border-2 border-deeppurple-800/20 flex items-center justify-center">→</span>
+            </a>
+          </div>
+
+          <!-- 4 Vibrant Color-Blocked Cards (Rose Pink, Burgundy/Plum, Warm Gold, Sapphire Blue) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Card 1: Rose Pink -->
+            <div class="playful-card rounded-[2rem] p-4 flex flex-col">
+              <div class="h-44 rounded-[1.5rem] bg-gradient-to-b from-rosepop-400 to-rosepop-500 p-5 flex flex-col justify-between text-white relative overflow-hidden">
+                <span class="px-3 py-1 rounded-full bg-white/25 text-[11px] font-extrabold w-fit">Core Subject</span>
+                <div>
+                  <div class="w-12 h-12 rounded-2xl bg-white text-rosepop-600 flex items-center justify-center font-display-bold text-xl mb-2 shadow-sm">
+                    ₹
+                  </div>
+                  <span class="text-xs font-bold text-rosepop-100">Degree &amp; Honours</span>
+                </div>
+              </div>
+              <div class="pt-4 pb-2 px-2 text-center">
+                <h3 class="font-display-bold text-xl text-deeppurple-900">Cost Accounting</h3>
+                <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Cost sheets, marginal costing, budgetary control &amp; variance analysis.</p>
+              </div>
+            </div>
+
+            <!-- Card 2: Deep Burgundy -->
+            <div class="playful-card rounded-[2rem] p-4 flex flex-col">
+              <div class="h-44 rounded-[1.5rem] bg-gradient-to-b from-burgundy-700 to-burgundy-900 p-5 flex flex-col justify-between text-white relative overflow-hidden">
+                <span class="px-3 py-1 rounded-full bg-white/20 text-[11px] font-extrabold w-fit">Commerce Foundation</span>
+                <div>
+                  <div class="w-12 h-12 rounded-2xl bg-white text-burgundy-800 flex items-center justify-center font-display-bold text-xl mb-2 shadow-sm">
+                    B.Com
+                  </div>
+                  <span class="text-xs font-bold text-rosepop-200">Financial &amp; Corporate</span>
+                </div>
+              </div>
+              <div class="pt-4 pb-2 px-2 text-center">
+                <h3 class="font-display-bold text-xl text-deeppurple-900">Financial Accounting</h3>
+                <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Ledgers, balance sheets, partnership &amp; corporate accounting standards.</p>
+              </div>
+            </div>
+
+            <!-- Card 3: Warm Gold / Amber -->
+            <div class="playful-card rounded-[2rem] p-4 flex flex-col">
+              <div class="h-44 rounded-[1.5rem] bg-gradient-to-b from-warmgold-300 to-warmgold-500 p-5 flex flex-col justify-between text-deeppurple-900 relative overflow-hidden">
+                <span class="px-3 py-1 rounded-full bg-deeppurple-900/10 text-[11px] font-extrabold w-fit">Academic Design</span>
+                <div>
+                  <div class="w-12 h-12 rounded-2xl bg-deeppurple-900 text-warmgold-300 flex items-center justify-center font-display-bold text-lg mb-2 shadow-sm">
+                    B.Ed
+                  </div>
+                  <span class="text-xs font-bold text-deeppurple-900/80">Structured Syllabi</span>
+                </div>
+              </div>
+              <div class="pt-4 pb-2 px-2 text-center">
+                <h3 class="font-display-bold text-xl text-deeppurple-900">Curriculum Planning</h3>
+                <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Outcome-based lesson modules, exam blueprints &amp; study guides.</p>
+              </div>
+            </div>
+
+            <!-- Card 4: Sapphire Blue -->
+            <div class="playful-card rounded-[2rem] p-4 flex flex-col">
+              <div class="h-44 rounded-[1.5rem] bg-gradient-to-b from-sapphire-600 to-sapphire-800 p-5 flex flex-col justify-between text-white relative overflow-hidden">
+                <span class="px-3 py-1 rounded-full bg-white/20 text-[11px] font-extrabold w-fit">1-on-1 Coaching</span>
+                <div>
+                  <div class="w-12 h-12 rounded-2xl bg-white text-sapphire-700 flex items-center justify-center font-display-bold text-lg mb-2 shadow-sm">
+                    Live
+                  </div>
+                  <span class="text-xs font-bold text-lavender-300">Home &amp; Online</span>
+                </div>
+              </div>
+              <div class="pt-4 pb-2 px-2 text-center">
+                <h3 class="font-display-bold text-xl text-deeppurple-900">Student Mentorship</h3>
+                <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Personalized doubt clearing, exam prep &amp; continuous progress tracking.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HIRE ME FOR TUITION & ONLINE CLASSES (Vibrant Pink Promo Banner + Dual Cards like "Combo Offer!") -->
+    <section id="hire-me" class="petal-reveal-section px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto space-y-8">
+        <div class="petal-mask-content space-y-8">
+          <!-- Vibrant Pink & Burgundy Banner (Inspired by the Reference's Pink Offer Banner) -->
+          <div class="relative rounded-[2.5rem] bg-gradient-to-r from-rosepop-500 via-rosepop-400 to-burgundy-700 text-white p-8 sm:p-10 lg:p-12 overflow-hidden shadow-xl">
+            <!-- Decorative Wave Blob -->
+            <svg class="absolute right-0 top-0 h-full w-1/2 opacity-20 pointer-events-none" viewBox="0 0 400 300" preserveAspectRatio="none">
+              <path d="M120,0 C60,90 180,180 80,300 L400,300 L400,0 Z" fill="#FFFFFF" />
+            </svg>
+
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div class="lg:col-span-7 space-y-3">
+                <span class="inline-block px-4 py-1 rounded-full bg-white text-burgundy-800 text-xs font-extrabold uppercase tracking-wider">
+                  Admissions Open • Flexible Batches
+                </span>
+                <h2 class="font-display-bold text-4xl sm:text-5xl text-white">
+                  Hire Me for Tuition &amp; Online Classes!
+                </h2>
+                <p class="text-sm sm:text-base text-white/95 font-medium max-w-xl">
+                  Personalized coaching for B.Com, Inter Commerce &amp; Cost Accounting students. <strong>Fees vary flexibly depending on class hours, schedule &amp; subject.</strong>
+                </p>
+                <div class="pt-2 flex flex-wrap items-center gap-4">
+                  <a href="#contact" data-prefill="Home / Offline Tuition Inquiry" class="book-tuition-btn pill-cta-dark text-white font-bold px-6 py-3.5 rounded-full inline-flex items-center gap-3 text-sm">
+                    <span>Book Your Slot Now</span>
+                    <span class="w-6 h-6 rounded-full bg-white text-deeppurple-900 flex items-center justify-center">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </a>
+                  <a href="tel:+918197382793" class="text-sm font-extrabold underline underline-offset-4 hover:text-warmgold-300">
+                    Call +91 81973 82793
+                  </a>
+                </div>
+              </div>
+
+              <!-- Right Side Mode Cards + Scalloped Badge -->
+              <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
+                <div class="rounded-3xl bg-white text-deeppurple-900 p-5 shadow-lg">
+                  <span class="px-2.5 py-0.5 rounded-full bg-rosepop-100 text-burgundy-800 text-[11px] font-extrabold">Offline / Home</span>
+                  <h3 class="font-display-bold text-xl mt-2">Home Tuition</h3>
+                  <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Kukatpally &amp; nearby Hyderabad. 1-on-1 or small batches.</p>
+                </div>
+
+                <div class="rounded-3xl bg-white text-deeppurple-900 p-5 shadow-lg">
+                  <span class="px-2.5 py-0.5 rounded-full bg-lavender-300/40 text-deeppurple-800 text-[11px] font-extrabold">Zoom / Meet</span>
+                  <h3 class="font-display-bold text-xl mt-2">Online Classes</h3>
+                  <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Live interactive whiteboard sessions in EN, HI, MR &amp; KN.</p>
+                </div>
+
+                <!-- Circular Scalloped Badge (Inspired by "20% OFF" badge in Reference) -->
+                <div class="hidden sm:flex flex-col items-center justify-center w-20 h-20 rounded-full bg-warmgold-400 text-deeppurple-900 font-display-bold text-center leading-tight shadow-lg border-4 border-white absolute -bottom-5 -right-3 rotate-6">
+                  <span class="text-xs">1-on-1</span>
+                  <span class="text-[10px] font-sans font-extrabold uppercase">Custom Fee</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SOFTWARE & TEACHING TOOLKIT (Deep Purple Wave Section like "Why You'll Love Us" in Reference) -->
+    <div id="toolkit" class="relative bg-deeppurple-800 text-white py-16 sm:py-20">
+      <!-- Top Purple Organic Wave -->
+      <svg class="w-full h-12 sm:h-16 block -mt-16 sm:-mt-20 mb-8" viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,100 L0,40 C240,95 480,0 720,45 C960,90 1200,15 1440,55 L1440,100 Z" fill="#271254" />
+      </svg>
+
+      <section class="petal-reveal-section px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="petal-mask-content">
+          <div class="text-center max-w-2xl mx-auto mb-10">
+            <h2 class="font-display-bold text-3xl sm:text-5xl text-white">
+              Skills &amp; <span class="text-rosepop-400">Software Toolkit</span>
+            </h2>
+            <p class="text-sm sm:text-base text-lavender-300 mt-2 font-medium">
+              Essential academic software and pedagogical tools for modern classroom &amp; online instruction.
+            </p>
+          </div>
+
+          <!-- 4 Clean Rounded White Cards (Exact Reference Card Style) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="rounded-3xl bg-white text-deeppurple-900 p-6 text-center shadow-lg hover:-translate-y-1 transition-transform">
+              <div class="w-12 h-12 mx-auto rounded-2xl bg-rosepop-100 text-burgundy-800 flex items-center justify-center font-display-bold text-lg mb-3">
+                MS
+              </div>
+              <h3 class="font-display-bold text-lg">MS Office Suite</h3>
+              <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">MS Word, Excel &amp; PowerPoint for lecture slides, cost sheets &amp; notes.</p>
+            </div>
+
+            <div class="rounded-3xl bg-white text-deeppurple-900 p-6 text-center shadow-lg hover:-translate-y-1 transition-transform">
+              <div class="w-12 h-12 mx-auto rounded-2xl bg-lavender-300/40 text-deeppurple-800 flex items-center justify-center font-display-bold text-lg mb-3">
+                PPT
+              </div>
+              <h3 class="font-display-bold text-lg">Visual Presentations</h3>
+              <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Interactive PowerPoint decks simplifying complex accounting models.</p>
+            </div>
+
+            <div class="rounded-3xl bg-white text-deeppurple-900 p-6 text-center shadow-lg hover:-translate-y-1 transition-transform">
+              <div class="w-12 h-12 mx-auto rounded-2xl bg-warmgold-300/60 text-burgundy-900 flex items-center justify-center font-display-bold text-lg mb-3">
+                LIVE
+              </div>
+              <h3 class="font-display-bold text-lg">Zoom, Meet &amp; Teams</h3>
+              <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Seamless remote tutoring, screen-shared ledgers &amp; Google Forms tests.</p>
+            </div>
+
+            <div class="rounded-3xl bg-white text-deeppurple-900 p-6 text-center shadow-lg hover:-translate-y-1 transition-transform">
+              <div class="w-12 h-12 mx-auto rounded-2xl bg-rosepop-100 text-rosepop-600 flex items-center justify-center font-display-bold text-lg mb-3">
+                ACC
+              </div>
+              <h3 class="font-display-bold text-lg">Computerized Accounting</h3>
+              <p class="text-xs text-deeppurple-800/75 mt-1 font-medium">Spreadsheet cost tabulations, trial balances &amp; analytical research.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Purple Organic Wave -->
+      <svg class="w-full h-12 sm:h-16 block mt-12 -mb-16 sm:-mb-20" viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,0 L0,50 C320,100 640,10 960,60 C1200,95 1340,35 1440,55 L1440,0 Z" fill="#271254" />
+      </svg>
+    </div>
+
+    <!-- 5. ACADEMIC EXPERIENCE & EDUCATION TIMELINE -->
+    <section id="experience" class="petal-reveal-section px-4 sm:px-6 lg:px-8 pt-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="petal-mask-content">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left 7 Cols: Teaching Experience -->
+            <div class="lg:col-span-7 space-y-5">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <h2 class="font-display-bold text-3xl sm:text-4xl text-deeppurple-900">
+                  Teaching <span class="text-rosepop-500">Experience</span>
+                </h2>
+                <div class="flex gap-1.5">
+                  <button type="button" data-exp-filter="all" class="exp-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-deeppurple-800 text-white">All</button>
+                  <button type="button" data-exp-filter="college" class="exp-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-rosepop-100 text-burgundy-800">College</button>
+                  <button type="button" data-exp-filter="mentorship" class="exp-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-rosepop-100 text-burgundy-800">Tutoring</button>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <article data-exp-category="college" class="exp-card playful-card rounded-3xl p-6">
+                  <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <span class="px-3 py-1 rounded-full bg-rosepop-500 text-white text-xs font-extrabold">July 2024 – Present</span>
+                    <span class="text-xs font-bold text-burgundy-800">Current Role</span>
+                  </div>
+                  <h3 class="font-display-bold text-xl text-deeppurple-900">Assistant Professor</h3>
+                  <p class="text-sm font-bold text-burgundy-700 mb-2">Pratibha Degree College, Kukatpally, Hyderabad</p>
+                  <p class="text-xs sm:text-sm text-deeppurple-800/80 leading-relaxed">
+                    Delivering undergraduate commerce lectures, mentoring student growth, conducting academic research, and leading innovative teaching methods.
+                  </p>
+                </article>
+
+                <article data-exp-category="college" class="exp-card playful-card rounded-3xl p-6">
+                  <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <span class="px-3 py-1 rounded-full bg-deeppurple-800 text-white text-xs font-extrabold">2021 – March 2023</span>
+                    <span class="text-xs font-bold text-deeppurple-700">2+ Years Tenure</span>
+                  </div>
+                  <h3 class="font-display-bold text-xl text-deeppurple-900">Senior Lecturer in Cost Accounting</h3>
+                  <p class="text-sm font-bold text-deeppurple-700 mb-2">Saraswati Degree College, Basavakalyan</p>
+                  <p class="text-xs sm:text-sm text-deeppurple-800/80 leading-relaxed">
+                    Designed degree-level Cost Accounting curricula, simplified complex costing frameworks, and evaluated academic performance.
+                  </p>
+                </article>
+
+                <article data-exp-category="mentorship" class="exp-card playful-card rounded-3xl p-6">
+                  <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <span class="px-3 py-1 rounded-full bg-sapphire-700 text-white text-xs font-extrabold">2021 – 2022</span>
+                    <span class="text-xs font-bold text-sapphire-700">1-on-1 Coaching</span>
+                  </div>
+                  <h3 class="font-display-bold text-xl text-deeppurple-900">Academic Home Tutor</h3>
+                  <p class="text-sm font-bold text-sapphire-700 mb-2">Remote &amp; Personalized Instruction</p>
+                  <p class="text-xs sm:text-sm text-deeppurple-800/80 leading-relaxed">
+                    Created customized lesson plans using remote learning tools and maintained clear progress updates with students and parents.
+                  </p>
+                </article>
+              </div>
+            </div>
+
+            <!-- Right 5 Cols: Education Credentials & Languages -->
+            <div id="education" class="lg:col-span-5 space-y-6">
+              <h2 class="font-display-bold text-3xl sm:text-4xl text-deeppurple-900">
+                Academic <span class="text-burgundy-700">Qualifications</span>
+              </h2>
+
+              <div class="playful-card rounded-3xl p-6 space-y-3.5">
+                <div class="p-3.5 rounded-2xl bg-rosepop-100/70 flex items-center justify-between gap-3">
+                  <div>
+                    <div class="font-display-bold text-base text-deeppurple-900">Master of Commerce (M.Com)</div>
+                    <div class="text-xs text-deeppurple-800/75 font-medium">Sharnbasva University • 2018–2020</div>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-burgundy-800 text-white text-xs font-extrabold shrink-0">8.2 CGPA</span>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-lavender-300/25 flex items-center justify-between gap-3">
+                  <div>
+                    <div class="font-display-bold text-base text-deeppurple-900">Bachelor of Education (B.Ed)</div>
+                    <div class="text-xs text-deeppurple-800/75 font-medium">Gulbarga University • 2022–2023</div>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-deeppurple-800 text-white text-xs font-extrabold shrink-0">8.3 CGPA</span>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-warmgold-300/35 flex items-center justify-between gap-3">
+                  <div>
+                    <div class="font-display-bold text-base text-deeppurple-900">Bachelor of Commerce (B.Com)</div>
+                    <div class="text-xs text-deeppurple-800/75 font-medium">Gulbarga University • 2015–2018</div>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-sapphire-700 text-white text-xs font-extrabold shrink-0">81.36%</span>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-rosepop-100/40 flex items-center justify-between gap-3">
+                  <div>
+                    <div class="font-display-bold text-base text-deeppurple-900">PUC &amp; SSLC (Karnataka Board)</div>
+                    <div class="text-xs text-deeppurple-800/75 font-medium">2013 – 2015</div>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-rosepop-500 text-white text-xs font-extrabold shrink-0">87.67% PUC</span>
+                </div>
+              </div>
+
+              <!-- Languages Card -->
+              <div class="playful-card rounded-3xl p-6">
+                <h3 class="font-display-bold text-xl text-deeppurple-900 mb-3">Languages Spoken</h3>
+                <div class="grid grid-cols-2 gap-2.5 text-xs font-bold">
+                  <div class="p-3 rounded-2xl bg-rosepop-100/70 text-burgundy-900 flex justify-between">
+                    <span>English</span>
+                    <span>90%</span>
+                  </div>
+                  <div class="p-3 rounded-2xl bg-lavender-300/30 text-deeppurple-900 flex justify-between">
+                    <span>Hindi</span>
+                    <span>90%</span>
+                  </div>
+                  <div class="p-3 rounded-2xl bg-warmgold-300/40 text-deeppurple-900 flex justify-between">
+                    <span>Marathi*</span>
+                    <span>98% Speak</span>
+                  </div>
+                  <div class="p-3 rounded-2xl bg-sapphire-600/10 text-sapphire-800 flex justify-between">
+                    <span>Kannada</span>
+                    <span>98% Speak</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CONTACT & ENQUIRY SECTION (Inspired by "Happy Customers" Warm Accent Box + Form) -->
+    <section id="contact" class="petal-reveal-section px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="petal-mask-content">
+          <div class="rounded-[2.5rem] bg-gradient-to-br from-rosepop-100 via-warmgold-300/30 to-lavender-300/30 p-7 sm:p-10 lg:p-12 border-2 border-rosepop-200">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <!-- Left Contact Card -->
+              <div class="lg:col-span-5 space-y-5">
+                <h2 class="font-display-bold text-3xl sm:text-5xl text-deeppurple-900">
+                  Start Learning <span class="text-rosepop-500">Together</span>
+                </h2>
+                <p class="text-sm text-deeppurple-800/80 font-medium">
+                  Reach out for home tuition in Hyderabad, live online classes, or academic collaborations.
+                </p>
+
+                <div class="space-y-3">
+                  <div class="p-4 rounded-2xl bg-white shadow-sm flex items-center justify-between gap-3">
+                    <div>
+                      <span class="text-[11px] font-extrabold uppercase text-rosepop-600 block">Phone / WhatsApp</span>
+                      <a href="tel:+918197382793" class="text-base font-extrabold text-deeppurple-900">+91 81973 82793</a>
+                    </div>
+                    <button type="button" data-copy="+91 81973 82793" class="copy-btn px-3.5 py-1.5 rounded-full bg-deeppurple-800 text-white text-xs font-bold hover:bg-rosepop-500 transition-colors">
+                      Copy
+                    </button>
+                  </div>
+
+                  <div class="p-4 rounded-2xl bg-white shadow-sm flex items-center justify-between gap-3">
+                    <div>
+                      <span class="text-[11px] font-extrabold uppercase text-deeppurple-700 block">Email</span>
+                      <a href="mailto:ashkade31@gmail.com" class="text-base font-extrabold text-deeppurple-900">ashkade31@gmail.com</a>
+                    </div>
+                    <button type="button" data-copy="ashkade31@gmail.com" class="copy-btn px-3.5 py-1.5 rounded-full bg-deeppurple-800 text-white text-xs font-bold hover:bg-rosepop-500 transition-colors">
+                      Copy
+                    </button>
+                  </div>
+
+                  <div class="p-4 rounded-2xl bg-white shadow-sm">
+                    <span class="text-[11px] font-extrabold uppercase text-sapphire-700 block">Location</span>
+                    <p class="text-sm font-bold text-deeppurple-900">KPHB Colony, Kukatpally, Hyderabad, Telangana</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Quick Enquiry Form -->
+              <div class="lg:col-span-7">
+                <form id="academic-contact-form" class="rounded-3xl bg-white p-6 sm:p-8 shadow-lg space-y-4">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label for="sender-name" class="block text-xs font-extrabold uppercase text-deeppurple-900 mb-1.5">Your Name</label>
+                      <input id="sender-name" type="text" required placeholder="Student or Faculty Name" class="w-full px-4 py-3 rounded-2xl bg-rosepop-100/40 border border-rosepop-200 text-sm font-semibold text-deeppurple-900 focus:outline-none focus:border-rosepop-500" />
+                    </div>
+                    <div>
+                      <label for="sender-contact" class="block text-xs font-extrabold uppercase text-deeppurple-900 mb-1.5">Phone or Email</label>
+                      <input id="sender-contact" type="text" required placeholder="+91 XXXXX XXXXX or Email" class="w-full px-4 py-3 rounded-2xl bg-rosepop-100/40 border border-rosepop-200 text-sm font-semibold text-deeppurple-900 focus:outline-none focus:border-rosepop-500" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label for="inquiry-topic" class="block text-xs font-extrabold uppercase text-deeppurple-900 mb-1.5">Class Mode / Purpose</label>
+                    <select id="inquiry-topic" class="w-full px-4 py-3 rounded-2xl bg-rosepop-100/40 border border-rosepop-200 text-sm font-bold text-deeppurple-900 focus:outline-none focus:border-rosepop-500">
+                      <option value="Home / Offline Tuition Inquiry">Home / Offline Tuition (Hyderabad)</option>
+                      <option value="Live Online Classes Inquiry">Live Online Classes (Zoom / Meet)</option>
+                      <option value="Guest Lecture / Academic Collaboration">Guest Lecture / Academic Collaboration</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label for="sender-message" class="block text-xs font-extrabold uppercase text-deeppurple-900 mb-1.5">Subject &amp; Preferred Timing</label>
+                    <textarea id="sender-message" rows="3" required placeholder="Mention subject (e.g., Cost Accounting, B.Com) and preferred hours..." class="w-full px-4 py-3 rounded-2xl bg-rosepop-100/40 border border-rosepop-200 text-sm font-semibold text-deeppurple-900 focus:outline-none focus:border-rosepop-500"></textarea>
+                  </div>
+
+                  <button type="submit" class="pill-cta-pink w-full text-white font-bold py-3.5 px-6 rounded-full text-sm sm:text-base">
+                    Send Tuition / Academic Enquiry
+                  </button>
+
+                  <div id="form-feedback-box" class="hidden p-4 rounded-2xl bg-rosepop-100 text-burgundy-900 text-sm font-bold"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- DEEP PURPLE WAVE FOOTER (Matching Reference Footer) -->
+  <div class="relative bg-deeppurple-800 text-white mt-14 pt-10 pb-10">
+    <svg class="w-full h-12 sm:h-16 block -mt-20 sm:-mt-24 mb-6" viewBox="0 0 1440 100" preserveAspectRatio="none">
+      <path d="M0,100 L0,45 C360,95 720,5 1080,55 C1260,80 1380,35 1440,50 L1440,100 Z" fill="#271254" />
+    </svg>
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+      <div class="font-display-bold text-2xl sm:text-3xl">
+        Prof. Ashwini <span class="text-rosepop-400">Kade</span>
+      </div>
+      <p class="text-xs sm:text-sm text-lavender-300 font-medium">
+        Assistant Professor • Pratibha Degree College, Kukatpally, Hyderabad
+      </p>
+      <div class="flex justify-center gap-3 pt-2">
+        <a href="tel:+918197382793" class="w-9 h-9 rounded-full bg-white text-deeppurple-900 flex items-center justify-center font-bold text-xs hover:bg-rosepop-400 hover:text-white transition-colors" title="Call">📞</a>
+        <a href="mailto:ashkade31@gmail.com" class="w-9 h-9 rounded-full bg-white text-deeppurple-900 flex items-center justify-center font-bold text-xs hover:bg-rosepop-400 hover:text-white transition-colors" title="Email">✉️</a>
+        <a href="#hire-me" class="w-9 h-9 rounded-full bg-white text-deeppurple-900 flex items-center justify-center font-bold text-xs hover:bg-rosepop-400 hover:text-white transition-colors" title="Tuition">🎓</a>
+      </div>
+      <p class="text-[11px] text-white/50 pt-3">© 2026 Ashwini Kade Academic Portfolio. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="clipboard-toast" class="fixed bottom-6 right-6 z-50 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="px-5 py-3 rounded-full bg-deeppurple-900 text-white text-xs sm:text-sm font-bold shadow-xl border border-rosepop-400/40">
+      <span id="clipboard-toast-text">Copied!</span>
+    </div>
+  </div>
+
+  <!-- SINGLE LIGHTWEIGHT THREE.JS 3D ROSE PETAL ENGINE + SCROLL MASK REVEAL -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const globalCanvas = document.getElementById('global-petal-canvas');
+      const renderer = new THREE.WebGLRenderer({ canvas: globalCanvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000);
+      camera.position.z = 200;
+
+      scene.add(new THREE.AmbientLight(0xfff5f7, 0.92));
+      const keyLight = new THREE.DirectionalLight(0xffffff, 0.95);
+      keyLight.position.set(140, 200, 260);
+      scene.add(keyLight);
+      const rimLight = new THREE.DirectionalLight(0xffb3c6, 0.55);
+      rimLight.position.set(-150, -100, 140);
+      scene.add(rimLight);
+
+      function createRosePetal3DGeometry() {
+        const geometry = new THREE.PlaneBufferGeometry(1.35, 1.55, 14, 14);
+        const pos = geometry.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+          let x = pos.getX(i);
+          let y = pos.getY(i);
+          const u = x / 0.675;
+          const v = y / 0.775;
+          const widthProfile = 0.24 + 0.76 * Math.sin(((v + 1) * 0.5) * Math.PI * 0.82);
+          x *= widthProfile;
+          const topNotch = v > 0.45 ? -0.14 * Math.exp(-u * u * 7) * ((v - 0.45) / 0.55) : 0;
+          const rimRuffle = Math.sin(u * 4.2) * 0.03 * Math.max(0, v);
+          y += topNotch + rimRuffle;
+          const cupX = (1 - u * u) * 0.25;
+          const cupY = (1 - v * v) * 0.21;
+          const topCurl = v > 0.55 ? -Math.pow((v - 0.55) / 0.45, 2) * 0.22 : 0;
+          const z = cupX + cupY + topCurl;
+          pos.setXYZ(i, x, y, z);
+        }
+        geometry.computeVertexNormals();
+        return geometry;
+      }
+
+      function createPetalVelvetTexture(pal) {
+        const c = document.createElement('canvas');
+        c.width = 192;
+        c.height = 192;
+        const ctx = c.getContext('2d');
+        const grad = ctx.createRadialGradient(96, 184, 6, 96, 84, 170);
+        grad.addColorStop(0.0, pal.base);
+        grad.addColorStop(0.18, pal.mid);
+        grad.addColorStop(0.74, pal.deep);
+        grad.addColorStop(1.0, pal.rim);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 192, 192);
+
+        ctx.strokeStyle = pal.vein;
+        ctx.lineCap = 'round';
+        for (let i = -6; i <= 6; i++) {
+          ctx.beginPath();
+          ctx.lineWidth = i === 0 ? 1.3 : 0.75;
+          ctx.moveTo(96 + i * 2, 188);
+          ctx.quadraticCurveTo(96 + i * 9, 98, 96 + i * 12, 8);
+          ctx.stroke();
+        }
+        const tex = new THREE.CanvasTexture(c);
+        tex.needsUpdate = true;
+        return tex;
+      }
+
+      const sharedPetalGeo = createRosePetal3DGeometry();
+      const palettes = [
+        { base: '#FFF2F4', mid: '#FF5C8A', deep: '#B81D4B', rim: '#6B142E', vein: 'rgba(74, 11, 30, 0.22)' },
+        { base: '#FCE4EC', mid: '#D93864', deep: '#8E1B3E', rim: '#4A0B1E', vein: 'rgba(42, 3, 14, 0.22)' },
+        { base: '#F5E6FA', mid: '#9D84F2', deep: '#5B35B5', rim: '#271254', vein: 'rgba(39, 18, 84, 0.20)' },
+        { base: '#FFFFFF', mid: '#FF85A1', deep: '#D93864', rim: '#8E1B3E', vein: 'rgba(142, 27, 62, 0.20)' }
+      ];
+      const baseMaterials = palettes.map((pal) => new THREE.MeshStandardMaterial({
+        map: createPetalVelvetTexture(pal),
+        roughness: 0.55,
+        metalness: 0.04,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 1.0
+      }));
+
+      let viewW = window.innerWidth;
+      let viewH = window.innerHeight;
+      function resizeGlobalCanvas() {
+        viewW = window.innerWidth;
+        viewH = window.innerHeight;
+        renderer.setSize(viewW, viewH, false);
+        camera.left = -viewW / 2;
+        camera.right = viewW / 2;
+        camera.top = viewH / 2;
+        camera.bottom = -viewH / 2;
+        camera.updateProjectionMatrix();
+      }
+      resizeGlobalCanvas();
+      window.addEventListener('resize', resizeGlobalCanvas);
+
+      function toWorld(px, py) {
+        return { x: px - viewW / 2, y: viewH / 2 - py };
+      }
+
+      /* Cursor Follower & Subtle 3D Petal Trail */
+      const cursorRing = document.getElementById('custom-cursor-ring');
+      const cursorPetals = [];
+      let lastCX = -100;
+      let lastCY = -100;
+
+      function spawnCursorPetal(x, y, burst = false) {
+        if (cursorPetals.length > 36) {
+          const old = cursorPetals.shift();
+          scene.remove(old.mesh);
+          old.mat.dispose();
+        }
+        const mat = baseMaterials[Math.floor(Math.random() * baseMaterials.length)].clone();
+        const mesh = new THREE.Mesh(sharedPetalGeo, mat);
+        const sc = burst ? 11 + Math.random() * 8 : 8 + Math.random() * 6;
+        mesh.scale.set(sc, sc, sc);
+        mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+        scene.add(mesh);
+
+        cursorPetals.push({
+          mesh, mat, x, y,
+          vx: (Math.random() - 0.35) * (burst ? 3.2 : 1.5),
+          vy: (Math.random() - 0.5) * (burst ? 3.0 : 1.4) + 0.6,
+          rx: (Math.random() - 0.5) * 0.08,
+          ry: (Math.random() - 0.5) * 0.09,
+          rz: (Math.random() - 0.5) * 0.07,
+          life: 1.0,
+          decay: 0.025
+        });
+      }
+
+      window.addEventListener('pointermove', (e) => {
+        if (cursorRing) {
+          cursorRing.style.left = `${e.clientX}px`;
+          cursorRing.style.top = `${e.clientY}px`;
+        }
+        if (Math.hypot(e.clientX - lastCX, e.clientY - lastCY) > 34) {
+          spawnCursorPetal(e.clientX, e.clientY, false);
+          lastCX = e.clientX;
+          lastCY = e.clientY;
+        }
+      }, { passive: true });
+
+      window.addEventListener('pointerdown', (e) => {
+        for (let i = 0; i < 5; i++) spawnCursorPetal(e.clientX, e.clientY, true);
+      }, { passive: true });
+
+      document.querySelectorAll('a, button, input, select, textarea, .playful-card').forEach((el) => {
+        el.addEventListener('mouseenter', () => cursorRing?.classList.add('is-hovering'));
+        el.addEventListener('mouseleave', () => cursorRing?.classList.remove('is-hovering'));
+      });
+
+      /* Scroll-Gated Left-to-Right Mask Wipe & 3D Petal Sweep */
+      const revealSections = Array.from(document.querySelectorAll('.petal-reveal-section')).map((sectionEl) => {
+        const content = sectionEl.querySelector('.petal-mask-content');
+        const petals = Array.from({ length: 34 }, (_, idx) => {
+          const mat = baseMaterials[idx % baseMaterials.length].clone();
+          mat.opacity = 0;
+          const mesh = new THREE.Mesh(sharedPetalGeo, mat);
+          mesh.visible = false;
+          const baseScale = 13 + Math.random() * 10;
+          mesh.scale.set(baseScale, baseScale, baseScale);
+          scene.add(mesh);
+          return {
+            mesh, mat, baseScale,
+            normX: Math.random(),
+            normY: 0.08 + Math.random() * 0.84,
+            rotX: Math.random() * Math.PI * 2,
+            rotY: Math.random() * Math.PI * 2,
+            rotZ: Math.random() * Math.PI * 2,
+            spinX: (Math.random() - 0.5) * 4.2,
+            spinY: (Math.random() - 0.5) * 4.8,
+            spinZ: (Math.random() - 0.5) * 3.5,
+            driftX: 55 + Math.random() * 85,
+            driftY: (Math.random() - 0.5) * 48,
+            phase: Math.random() * Math.PI * 2
+          };
+        });
+
+        return {
+          sectionEl,
+          content,
+          petals,
+          currentProgress: 0,
+          targetProgress: 0
+        };
+      });
+
+      let hasUserScrolled = false;
+
+      function updateScrollTargets() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - viewH;
+        const topBar = document.getElementById('top-scroll-progress');
+        if (topBar && docHeight > 0) {
+          topBar.style.width = `${Math.min(100, (scrollTop / docHeight) * 100)}%`;
+        }
+
+        if (!hasUserScrolled && scrollTop < 25) return;
+        hasUserScrolled = true;
+
+        for (const s of revealSections) {
+          const rect = s.sectionEl.getBoundingClientRect();
+          const startTrigger = viewH * 0.88;
+          const endTrigger = viewH * 0.35;
+          const raw = (startTrigger - rect.top) / (startTrigger - endTrigger);
+          const clamped = Math.max(0, Math.min(1, raw));
+          const mappedTarget = clamped * 1.22;
+          if (mappedTarget > s.targetProgress) {
+            s.targetProgress = mappedTarget;
+          }
+        }
+      }
+
+      function animateAll(time) {
+        for (let i = cursorPetals.length - 1; i >= 0; i--) {
+          const p = cursorPetals[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.mesh.rotation.x += p.rx;
+          p.mesh.rotation.y += p.ry;
+          p.mesh.rotation.z += p.rz;
+          p.life -= p.decay;
+          if (p.life <= 0) {
+            scene.remove(p.mesh);
+            p.mat.dispose();
+            cursorPetals.splice(i, 1);
+            continue;
+          }
+          const pos = toWorld(p.x, p.y);
+          p.mesh.position.set(pos.x, pos.y, 10);
+          p.mat.opacity = Math.max(0, p.life * 0.9);
+        }
+
+        for (const s of revealSections) {
+          s.currentProgress += (s.targetProgress - s.currentProgress) * 0.12;
+          const pct = Math.min(122, s.currentProgress * 100);
+          s.sectionEl.style.setProperty('--reveal-progress', `${pct.toFixed(2)}%`);
+
+          if (pct >= 119.5) {
+            s.content.classList.add('is-fully-revealed');
+          } else {
+            s.content.classList.remove('is-fully-revealed');
+          }
+
+          const waveFront = s.currentProgress;
+          const rect = s.sectionEl.getBoundingClientRect();
+          const inViewport = rect.bottom > -60 && rect.top < viewH + 60;
+
+          if (inViewport && waveFront > 0.005 && waveFront < 1.21) {
+            for (const p of s.petals) {
+              const delta = waveFront - p.normX * 0.92;
+              if (delta > -0.14 && delta < 0.28) {
+                const localT = (delta + 0.14) / 0.42;
+                const alpha = Math.sin(localT * Math.PI);
+                const screenX = rect.left + p.normX * rect.width + localT * p.driftX + Math.sin(time * 0.003 + p.phase) * 8;
+                const screenY = rect.top + p.normY * rect.height + localT * p.driftY + Math.cos(time * 0.0025 + p.phase) * 6;
+                const pos = toWorld(screenX, screenY);
+
+                p.mesh.visible = true;
+                p.mesh.position.set(pos.x, pos.y, Math.sin(localT * Math.PI) * 30);
+                p.mesh.rotation.set(
+                  p.rotX + localT * p.spinX,
+                  p.rotY + localT * p.spinY,
+                  p.rotZ + localT * p.spinZ
+                );
+                const curScale = p.baseScale * (1 - localT * 0.2);
+                p.mesh.scale.set(curScale, curScale, curScale);
+                p.mat.opacity = Math.max(0, Math.min(1, alpha));
+              } else {
+                p.mesh.visible = false;
+              }
+            }
+          } else {
+            for (const p of s.petals) p.mesh.visible = false;
+          }
+        }
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animateAll);
+      }
+
+      window.addEventListener('scroll', updateScrollTargets, { passive: true });
+      updateScrollTargets();
+      requestAnimationFrame(animateAll);
+
+      /* Replay Petal Reveal Button */
+      function replayAllPetalReveals() {
+        hasUserScrolled = false;
+        revealSections.forEach((s) => {
+          s.currentProgress = 0;
+          s.targetProgress = 0;
+          s.content.classList.remove('is-fully-revealed');
+          s.sectionEl.style.setProperty('--reveal-progress', '0%');
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('Scroll down to watch the left-to-right rose petal reveal!');
+      }
+
+      document.getElementById('replay-petals-btn')?.addEventListener('click', replayAllPetalReveals);
+      document.getElementById('replay-petals-mobile')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu')?.classList.add('hidden');
+        replayAllPetalReveals();
+      });
+
+      /* Pre-select Inquiry Purpose on Tuition Buttons */
+      document.querySelectorAll('.book-tuition-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const topicSelect = document.getElementById('inquiry-topic');
+          if (topicSelect && btn.dataset.prefill) {
+            topicSelect.value = btn.dataset.prefill;
+          }
+        });
+      });
+
+      /* Experience Role Filter */
+      const filterBtns = document.querySelectorAll('.exp-filter-btn');
+      const expCards = document.querySelectorAll('.exp-card');
+      filterBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const filter = btn.dataset.expFilter;
+          filterBtns.forEach((b) => {
+            b.classList.remove('bg-deeppurple-800', 'text-white');
+            b.classList.add('bg-rosepop-100', 'text-burgundy-800');
+          });
+          btn.classList.add('bg-deeppurple-800', 'text-white');
+          btn.classList.remove('bg-rosepop-100', 'text-burgundy-800');
+
+          expCards.forEach((card) => {
+            card.style.display = (filter === 'all' || card.dataset.expCategory === filter) ? '' : 'none';
+          });
+        });
+      });
+
+      /* Copy to Clipboard & Toast */
+      const toastEl = document.getElementById('clipboard-toast');
+      const toastText = document.getElementById('clipboard-toast-text');
+      let toastTimer;
+
+      function showToast(msg) {
+        if (!toastEl || !toastText) return;
+        toastText.textContent = msg;
+        toastEl.classList.remove('translate-y-20', 'opacity-0');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toastEl.classList.add('translate-y-20', 'opacity-0');
+        }, 3000);
+      }
+
+      document.querySelectorAll('.copy-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const textToCopy = btn.dataset.copy;
+          const tempInput = document.createElement('textarea');
+          tempInput.value = textToCopy;
+          tempInput.style.position = 'fixed';
+          tempInput.style.opacity = '0';
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          try {
+            document.execCommand('copy');
+            showToast(`Copied: ${textToCopy}`);
+          } catch (err) {
+            showToast(`Contact: ${textToCopy}`);
+          }
+          document.body.removeChild(tempInput);
+        });
+      });
+
+      /* Contact Form Submission */
+      const contactForm = document.getElementById('academic-contact-form');
+      const feedbackBox = document.getElementById('form-feedback-box');
+      if (contactForm && feedbackBox) {
+        contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('sender-name').value.trim();
+          const topic = document.getElementById('inquiry-topic').value;
+          feedbackBox.textContent = `Thank you, ${name}! Your inquiry regarding "${topic}" has been prepared for Ashwini Kade (ashkade31@gmail.com).`;
+          feedbackBox.classList.remove('hidden');
+          showToast('Academic inquiry logged successfully!');
+          contactForm.reset();
+        });
+      }
+
+      /* Mobile Menu Toggle */
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const iconOpen = document.getElementById('menu-icon-open');
+      const iconClose = document.getElementById('menu-icon-close');
+
+      mobileMenuBtn?.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.toggle('hidden');
+        iconOpen.classList.toggle('hidden', !isHidden);
+        iconClose.classList.toggle('hidden', isHidden);
+      });
+
+      document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          iconOpen.classList.remove('hidden');
+          iconClose.classList.add('hidden');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
